@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Update Show: {{ show.title }}{% endblock %}
+
+{% block content %}
+    <h2>Admin - Update Show: {{ show.title }}</h2>
+
+    {% if errors %}
+        <div class="error">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {# Use submitted values if errors occurred, otherwise use existing show data #}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ title|default:show.title }}" required>
+        </div>
+         <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ description|default:show.description }}</textarea>
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="{{ date_str|default:'' }}" required> {# date_str is pre-formatted in view #}
+        </div>
+        <div>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" value="{{ time_str|default:'' }}" required> {# time_str is pre-formatted in view #}
+        </div>
+         <div>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ location|default:show.location }}" required>
+        </div>
+        <div>
+            <label for="total_seats">Total Seats:</label>
+            {# Use total_seats_str if there was a submission error, otherwise use show.total_seats #}
+            <input type="number" id="total_seats" name="total_seats" min="1" value="{{ total_seats_str|default:show.total_seats }}" required>
+            <small>Note: Cannot reduce total seats below currently booked tickets ({{ show.total_seats|add:"-"|add:show.available_seats }} booked).</small>
+        </div>
+         <div>
+            <label for="price">Price:</label>
+             {# Use price_str if there was a submission error, otherwise use show.price #}
+            <input type="number" id="price" name="price" min="0" step="0.01" value="{{ price_str|default:show.price|floatformat:2 }}" required>
+        </div>
+        <div>
+            <label for="is_active">Is Active:</label>
+            {# Check the checkbox based on is_active variable, defaulting to show.is_active #}
+            <input type="checkbox" id="is_active" name="is_active" {% if is_active is None %}{% if show.is_active %}checked{% endif %}{% else %}{% if is_active %}checked{% endif %}{% endif %}>
+        </div>
+
+        <div>
+            <button type="submit">Update Show</button>
+            <a href="{% url 'admin_show_list' %}">Cancel</a>
+        </div>
+    </form>
+
+{% endblock %}

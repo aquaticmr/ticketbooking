@@ -1,0 +1,43 @@
+/* Basic static CSS - You can add more here */
+/* The base.html already contains some basic styling for demonstration */
+
+/* Example: Center text in table headers */
+th {
+    text-align: center;
+}
+
+/* Example: Style for show titles */
+.show-title {
+    color: #007bff;
+}
+
+/* Example: Visually indicate limited availability */
+.low-availability {
+    color: orange;
+    font-weight: bold;
+}
+
+/* Example: Visually indicate no availability */
+.no-availability {
+    color: red;
+    font-weight: bold;
+}
+
+/* Ensure image containers handle their images */
+.show-image-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Style for small forms like delete confirmation */
+.small-form {
+    width: 50%; /* Example: Make it narrower */
+    margin: 20px auto; /* Center it */
+    text-align: center;
+}
+
+.small-form button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 1.1em;
+}

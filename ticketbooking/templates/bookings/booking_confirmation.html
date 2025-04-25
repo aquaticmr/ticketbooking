@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Confirmation{% endblock %}
+
+{% block content %}
+    <h2>Booking Successful!</h2>
+
+    <p>Your tickets have been booked.</p>
+
+    <p><a href="{% url 'booking_history' %}">View your booking history</a></p>
+    <p><a href="{% url 'show_list' %}">Browse more shows</a></p>
+
+{% endblock %}

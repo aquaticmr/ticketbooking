@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load tz %} {# Load timezone tags #}
+
+{% block title %}{{ show.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ show.title }}</h2>
+
+    {% if errors %}
+        <div class="error">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <p><strong>Description:</strong> {{ show.description|linebreaksbr }}</p>
+    <p><strong>When:</strong> {% if show.date_time %}{% timezone request.user.profile.timezone|default_if_none:TIME_ZONE %}{{ show.date_time|date:"l, F d, Y P" }}{% endtimezone %}{% else %}N/A{% endif %}</p> {# Format date/time nicely #}
+    <p><strong>Where:</strong> {{ show.location }}</p>
+    <p><strong>Price:</strong> ${{ show.price|floatformat:2 }}</p>
+    <p><strong>Available Seats:</strong>
+        {% if show.available_seats == 0 %}
+            <span class="no-availability">Sold Out</span>
+        {% elif show.available_seats < 10 %}
+            <span class="low-availability">{{ show.available_seats }} left!</span>
+        {% else %}
+            {{ show.available_seats }}
+        {% endif %}
+         / {{ show.total_seats }}
+    </p>
+
+    {% if user.is_authenticated %}
+        {% if show.available_seats > 0 %}
+            <h3>Book Tickets</h3>
+            <form method="post">
+                {% csrf_token %} {# Important for security #}
+                <div>
+                    <label for="quantity">Number of Tickets (max {{ show.available_seats }}):</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="{{ show.available_seats }}" value="{{ submitted_quantity|default:'1' }}" required>
+                </div>
+                <div>
+                    <button type="submit">Book Now</button>
+                </div>
+            </form>
+        {% else %}
+            <p class="no-availability">Booking is closed (Sold Out).</p>
+        {% endif %}
+    {% else %}
+        <p>Please <a href="{% url 'login' %}?next={{ request.get_full_path }}">login</a> to book tickets.</p>
+    {% endif %}
+
+{% endblock %}

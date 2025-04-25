@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load tz %} {# Load timezone tags #}
+
+{% block title %}Admin - Manage Shows{% endblock %}
+
+{% block content %}
+    <h2>Admin - Manage Shows</h2>
+
+    <p><a href="{% url 'admin_show_create' %}">Create New Show</a></p>
+
+     {% if request.session.admin_show_errors %}
+        <div class="error">
+            <ul>
+                {% for error in request.session.admin_show_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+             {# Clear the error messages from session after displaying #}
+            {% with request.session.admin_show_errors as _ %}{% unset request.session.admin_show_errors %}{% endwith %}
+        </div>
+    {% endif %}
+
+
+    {% if shows %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date & Time</th>
+                    <th>Location</th>
+                    <th>Seats</th>
+                    <th>Price</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for show in shows %}
+                    <tr>
+                        <td>{{ show.title }}</td>
+                        <td>{% if show.date_time %}{% timezone TIME_ZONE %}{{ show.date_time|date:"Y-m-d H:i" }}{% endtimezone %}{% else %}N/A{% endif %}</td>
+                        <td>{{ show.location }}</td>
+                        <td>{{ show.available_seats }} / {{ show.total_seats }}</td>
+                        <td>${{ show.price|floatformat:2 }}</td>
+                        <td>{{ show.is_active|yesno:"Yes,No" }}</td>
+                        <td>
+                            <a href="{% url 'admin_show_update' pk=show.pk %}" class="edit-button">Edit</a>
+                            {# Simple POST form for delete button #}
+                            <form action="{% url 'admin_show_delete' pk=show.pk %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete show \'{{ show.title|escapejs }}\'? This cannot be undone.')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No shows found.</p>
+    {% endif %}
+
+{% endblock %}

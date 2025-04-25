@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Create Show{% endblock %}
+
+{% block content %}
+    <h2>Admin - Create New Show</h2>
+
+     {% if errors %}
+        <div class="error">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ title|default:'' }}" required>
+        </div>
+         <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ description|default:'' }}</textarea>
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="{{ date_str|default:'' }}" required>
+        </div>
+        <div>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" value="{{ time_str|default:'' }}" required>
+        </div>
+         <div>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ location|default:'' }}" required>
+        </div>
+        <div>
+            <label for="total_seats">Total Seats:</label>
+            <input type="number" id="total_seats" name="total_seats" min="1" value="{{ total_seats_str|default:'' }}" required>
+        </div>
+         <div>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" min="0" step="0.01" value="{{ price_str|default:'' }}" required>
+        </div>
+        <div>
+            <label for="is_active">Is Active:</label>
+            <input type="checkbox" id="is_active" name="is_active" {% if is_active|default:True %}checked{% endif %}>
+        </div>
+
+        <div>
+            <button type="submit">Create Show</button>
+            <a href="{% url 'admin_show_list' %}">Cancel</a>
+        </div>
+    </form>
+
+{% endblock %}

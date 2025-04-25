@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load tz %} {# Load timezone tags #}
+
+{% block title %}Available Shows{% endblock %}
+
+{% block content %}
+    <h2>Available Shows</h2>
+
+    {% if shows %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date & Time</th>
+                    <th>Location</th>
+                    <th>Available Seats</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for show in shows %}
+                    <tr>
+                        <td><a href="{% url 'show_detail' pk=show.pk %}" class="show-title">{{ show.title }}</a></td>
+                        <td>{% if show.date_time %}{% timezone request.user.profile.timezone|default_if_none:TIME_ZONE %}{{ show.date_time|date:"Y-m-d H:i" }}{% endtimezone %}{% else %}N/A{% endif %}</td> {# Format date/time #}
+                        <td>{{ show.location }}</td>
+                        <td>
+                            {% if show.available_seats == 0 %}
+                                <span class="no-availability">Sold Out</span>
+                            {% elif show.available_seats < 10 %} {# Example threshold #}
+                                <span class="low-availability">{{ show.available_seats }} left!</span>
+                            {% else %}
+                                {{ show.available_seats }}
+                            {% endif %} / {{ show.total_seats }}
+                        </td>
+                        <td>${{ show.price|floatformat:2 }}</td> {# Format price #}
+                        <td>
+                            {% if show.available_seats > 0 %}
+                                <a href="{% url 'show_detail' pk=show.pk %}">Book Now</a>
+                            {% else %}
+                                Sold Out
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No shows available at the moment.</p>
+    {% endif %}
+
+{% endblock %}

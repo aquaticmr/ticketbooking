@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Admin Dashboard</h2>
+
+    <p>Welcome to the custom admin panel.</p>
+
+    <ul>
+        <li><a href="{% url 'admin_show_list' %}">Manage Shows</a></li>
+        <li><a href="{% url 'admin_booking_list' %}">View All Bookings</a></li>
+        {# Add more links here as custom admin functionality grows #}
+    </ul>
+
+{% endblock %}
