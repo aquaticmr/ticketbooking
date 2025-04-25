@@ -1,10 +1,10 @@
-# 🎟️ Ticket Booking System
+#  Ticket Booking System
 
 A web-based ticket booking system for managing shows, seat selections, and user bookings. Built with Django, Dockerized for easy deployment, and integrated with Jenkins for CI/CD automation.
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 
 This application allows users to:
 - Register and log in to their account
@@ -38,14 +38,12 @@ This application allows users to:
 
 ```bash
 # Clone the repository
-git clone https://github.com/
+[git clone https://github.com/](https://github.com/aquaticmr/ticketbooking.git)
 cd ticket_booking_system
 
 # Build and run the containers
 docker-compose up --build
 
-# Create superuser (optional)
-docker-compose exec web python manage.py createsuperuser
 
 # Access the app
 Visit http://localhost:8000
