@@ -17,14 +17,13 @@ This application allows users to:
 
 ## 🛠️ Tech Stack Used
 
-- **Backend**: Django (Python)
-- **Frontend**: HTML, CSS (Bootstrap)
-- **Database**: PostgreSQL
-- **Containerization**: Docker, Docker Compose
-- **CI/CD**: Jenkins
-- **Authentication**: Django’s built-in auth system
-- **Others**: Gunicorn (for production), Whitenoise (for static files)
-
+*   **Backend:** Python 3.12, Django 5.x
+*   **Database:** MySQL 8.0 (containerized)
+*   **Frontend:** HTML5, CSS3 (Basic styling provided in `static/css/style.css`)
+*   **Server within Docker:** Django Development Server (`manage.py runserver 0.0.0.0:8000`) - *Note: For production deployment, replace this with a production-ready WSGI/ASGI server like Gunicorn or uWSGI.*
+*   **Containerization:** Docker, Docker Compose (using modern `docker compose` syntax)
+*   **DB Driver:** `mysqlclient`
+*   **Environment Variables:** `python-dotenv`
 ---
 
 ## ⚙️ Setup & Run Instructions
@@ -109,22 +108,73 @@ Deploy to Docker container
 
 Ensure Jenkins is set up to trigger on push to the repository and Docker is installed on the Jenkins host.
 
+## Custom Admin Panel
+
+This project features a custom administration panel built using standard Django views and templates, completely separate from `django.contrib.admin`.
+
+*   **Access URL:** `http://localhost:8000/custom-admin/` (or your mapped web port)
+*   **Authentication:** Requires login using a user account that has `is_superuser` set to `True` (created via `python manage.py createsuperuser`).
+
 # 📂 Project Structure
 ```
 
-ticket_booking_system/
-├── bookings/              
-├── shows/                 
-├── users/                 
-├── admin_panel/           
-├── templates/             
-├── static/                
-├── ticket_booking/        
-├── Dockerfile             
-├── docker-compose.yml     
-├── Jenkinsfile            
-├── requirements.txt       
-└── manage.py
+ticket_booking_system_root/
+├── .gitignore
+├── Dockerfile
+├── Jenkinsfile
+├── README.md
+├── accounts/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── bookings/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── custom_admin/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── docker-compose.yml
+├── manage.py
+├── requirements.txt
+├── shows/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── templates/
+│   ├── accounts/
+│   ├── bookings/
+│   ├── custom_admin/
+│   ├── shows/
+│   ├── base.html
+│   └── home.html
+└── ticket_booking_system/
+    ├── __init__.py
+    ├── asgi.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
 
 ```
 
